@@ -37,7 +37,7 @@ Deserialising the object, we get:
 `    [name] => User86968804`
 `)`
 
-Essentially, the token is a serialized PHP object of class `User` and a value for name.
+Essentially, the PHPSESSID is a serialized PHP object of class `User` and a value for name.
 
 Very interesting. We may be able to exploit this in the future as the code displays "Welcome to the Libwary, {name}"
 
