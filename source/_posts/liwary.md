@@ -56,6 +56,8 @@ We notice that there are two classes,  `book`  and `user`. The User class does..
 Also note that if the name is not `fakeflag` but the name contains "flag", the word "flag" gets deleted.
 
 
+
+
 EXPLOIT
 =======
 Now for the fun part, exploitation.
