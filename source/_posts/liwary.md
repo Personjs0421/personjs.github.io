@@ -74,7 +74,7 @@ and, of course
 
 If we can get `echo $user` to echo the contents of a Book object, we could just use that to get the contents of flag.txt. 
 
-Very conveniently, the `__tostring()` function does exactly what we need. If we just changed the PHPSESSID cookie to a serialised object of class `Book`, like, say, I don't know, a `Book` object with the name flag.txt, it would just echo out the contents.
+Very conveniently, the `__tostring()` function does exactly what we need. If we just changed the PHPSESSID cookie to a serialised object of class `Book`, like, say, I don't know, a `Book` object of `$name` flag.txt, it would just echo out flag.txt.
 
 Execution
 --
