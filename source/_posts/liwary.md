@@ -45,7 +45,7 @@ Very interesting. We may be able to exploit this in the future as the code displ
 Files and source
 -
 
-We are given a file, Libwary.zip. In it we have 2 PHP files, index.php and util.php as well as a directory containing the books, fakeflag.txt and flag.txt, of course with the redacted flag.
+We are given a file, Libwary.zip. In it we have 2 PHP files, index.php and util.php as well as a directory containing the books, fakeflag.txt and flag.txt, of course with a redacted flag.
 
 Opening util.php, we can see the following:
 
