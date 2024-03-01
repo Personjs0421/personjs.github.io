@@ -20,7 +20,7 @@
 
 # 网站图标
 favicon:
-  enable: true
+  enable: false
   icon: /source/pfp.jpg
   touch_icon: /source/pfp.jpg
 
