@@ -53,9 +53,9 @@ Opening util.php, we can see the following:
 
 ![Alt text](https://github.com/Personjs0421/Personjs0421.github.io/blob/main/source/pfp.jpg)
 
-We notice that there are two classes,  `book`  and `user`. The User class does... well not really anything. However, the book class is interesting. We can see that it uses the `$name` variable to find the corresponding book and then returns the content whenever an instance of the class is treated as a string.
+We notice that there are two classes,  `book`  and `user`. The User class does... well not really anything. However, the book class is interesting. We can see that it uses the `$name` variable to find the corresponding book and then returns the content of said book whenever an instance of the class is treated as a string.
 
-Also note that if the name is not `fakeflag` but the name contains "flag", the word "flag" gets deleted.
+Also note that if the name is not `fakeflag` but contains "flag", the word "flag" gets deleted.
 
 
 
