@@ -26,7 +26,7 @@ Decrypting this, we are provided with a serialised PHP object.
 `O:4:"User":1:{s:4:"name";s:12:"User86968804";}`
 
 
-*Here comes me being dumb. As this was my first ever CTF competition, I had very little experience and had no clue what PHP deserialisation was. So, I gave up here during the competition, after which someone told me that the solution was PHP deserialisation, and a few Google searches later, I solved it (yay).*
+*Here comes me being dumb. As this was my first ever CTF competition, I had very little experience and had no clue what PHP serialisation was. So, I gave up here during the competition, after which someone told me that the solution was PHP deserialisation, and a few Google searches later, I solved it (yay).*
 
 Deserialising the object, we get:
 
