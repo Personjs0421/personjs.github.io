@@ -21,12 +21,12 @@
 # 网站图标
 favicon:
   enable: false
-  icon: /source/pfp.jpg
-  touch_icon: /source/pfp.jpg
+  icon: https://github.com/Personjs0421/Personjs0421.github.io/blob/main/source/pfp.jpg
+  touch_icon: https://github.com/Personjs0421/Personjs0421.github.io/blob/main/source/pfp.jpg
 
 # 用户头像与昵称
 avatar:
-  author_photo: source/pfp.jpg
+  author_photo: https://github.com/Personjs0421/Personjs0421.github.io/blob/main/source/pfp.jpg
   author_nickname: personjs
   path: /
 
