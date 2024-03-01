@@ -21,8 +21,8 @@
 # 网站图标
 favicon:
   enable: true
-  icon: /images/favicon.png
-  touch_icon: /images/favicon.png
+  icon: /source/pfp.jpg
+  touch_icon: /source/pfp.jpg
 
 # 用户头像与昵称
 avatar:
