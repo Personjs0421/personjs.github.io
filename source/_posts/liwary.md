@@ -20,7 +20,7 @@ Moving on, we can select which book to read, and it its contents are shown on th
 
 There aren't any other ways to give user inputs, and we can't modify any of the book options, so we look elsewhere. 
 
-Checking our cookies, I noticed that we have a PHPSESSID, of course in base64.
+Checking our cookies, I noticed that we have a `PHPSESSID`, of course in base64.
 Decrypting this, we are provided with a serialised PHP object.
 
 `O:4:"User":1:{s:4:"name";s:12:"User86968804";}`
@@ -37,7 +37,7 @@ Deserialising the object, we get:
 `    [name] => User86968804`
 `)`
 
-Essentially, the PHPSESSID is a serialized PHP object of class `User` and a value for name.
+Essentially, the `PHPSESSID` is a serialised PHP object of class `User` and a value for name.
 
 Very interesting. We may be able to exploit this in the future as the code displays "Welcome to the Libwary, {name}"
 
