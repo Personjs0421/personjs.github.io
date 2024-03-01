@@ -104,7 +104,7 @@ However, this is an easy fix. We just change up our serialised object to this:
 
 When the code tries to replace the "flag" in "flaflagg", it just gives us back "flag.txt"
 
-Re-encoding and re-serialising, we get:
+Re-serialising and re-encoding, we get:
 
 `Tzo0OiJCb29rIjoxOntzOjQ6Im5hbWUiO3M6MTI6ImZsZmxhZ2FnLnR4dCI7fQ`
 
