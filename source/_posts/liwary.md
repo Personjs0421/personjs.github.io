@@ -100,7 +100,7 @@ Whoops. Forgot about the final defence code.
 However, this is an easy fix. We just change up our serialised object to this:
  `O:4:"Book":1:{s:4:"name";s:12:"flaflagg.txt";}` 
 
-When the code tries to replace the "flag" inf "flaflagg", it just gives us back "flag.txt"
+When the code tries to replace the "flag" in "flaflagg", it just gives us back "flag.txt"
 
 Re-encoding and re-serialising, we get:
 
