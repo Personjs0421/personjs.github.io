@@ -18,7 +18,9 @@ We are presented with a dropdown menu with 5 books. One of them is called "The f
 
 Moving on, we can select which book to read, and it its contents are shown on the page.
 
-There aren't any other ways to give user inputs, and we can't modify any of the options, so we look elsewhere. I noticed that there is a PHPSESSID, of course in base64.
+There aren't any other ways to give user inputs, and we can't modify any of the book options, so we look elsewhere. 
+
+Checking our cookies, I noticed that we have a PHPSESSID, of course in base64.
 Decrypting this, we are provided with a serialised PHP object.
 
 `O:4:"User":1:{s:4:"name";s:12:"User86968804";}`
