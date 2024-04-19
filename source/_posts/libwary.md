@@ -91,7 +91,7 @@ Next, we encode it in Base64 to get this:
 
 Passing this into our PHPSESSID and...
 
-image to be added
+image to be adding
 
 Whoops. Forgot about the final defence code.
 
