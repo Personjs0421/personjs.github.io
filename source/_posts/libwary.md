@@ -1,5 +1,5 @@
 ---
-title: liwary
+title: libwary
 date: 2024-02-29 21:45:18
 tags:
 ---
