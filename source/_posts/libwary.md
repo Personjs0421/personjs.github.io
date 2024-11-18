@@ -51,7 +51,7 @@ Opening util.php, we can see the following:
 
 
 
-![Alt text](https://github.com/Personjs0421/Personjs0421.github.io/blob/main/source/pfp.jpg)
+![Alt text](../source/pfp.jpg)
 
 We notice that there are two classes,  `book`  and `user`. The User class does... well not really anything. However, the book class is interesting. We can see that it uses the `$name` variable to find the corresponding book and then returns the content of said book whenever an instance of the class is treated as a string.
 
