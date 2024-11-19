@@ -1,3 +1,8 @@
+---
+title: 1337ctfwriteups
+date: 2024-11-19 21:32:57
+tags:
+---
 I played in 1337up CTF last weekend but no one wants to hear about my day so here are my writeups for the few pwn challenges I solved.
 
 # Notepad 1
