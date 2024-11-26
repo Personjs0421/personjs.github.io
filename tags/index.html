@@ -13,7 +13,7 @@
   
   <title>
     
-      libwary 
+      Tag 
       
       
       |
@@ -142,145 +142,21 @@
 
 
 
-
-  
-
-  
-
-  
-
-  
-  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
-  <div class="container post-details" id="post-details">
-    <div class="post-content">
-      <div class="post-title">libwary</div>
-      <div class="post-attach">
-        <span class="post-pubtime">
-          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-          2024-11-26 10:52:07
-        </span>
-        
-              <span class="post-tags">
-                <i class="iconfont icon-tags mr-10" title="Tags"></i>
-                
-                <span class="span--tag mr-8">
-                  <a href="/tags/PHP-deserialization-Web/" title="PHP deserialization, Web">
-                    #PHP deserialization, Web
-                  </a>
-                </span>
-                
-              </span>
-          
-      </div>
-      <div class="markdown-body">
-        <p>Libwary Writeup</p>
-<p><em>Disclaimer: I neither did this completely on my own nor did this during the competition. Although I solved 90% on my own, I did get a pretty big hint</em></p>
-<h1 id="RECON"><a href="#RECON" class="headerlink" title="RECON"></a>RECON</h1><h2 id="The-Website"><a href="#The-Website" class="headerlink" title="The Website"></a>The Website</h2><p>We are presented with a dropdown menu with 5 books. One of them is called “The flag”, which obviously immediately gives us the flag and this writeup doesn’t actually exist.</p>
-<p>Moving on, we can select which book to read, and it its contents are shown on the page.</p>
-<p>There aren’t any other ways to give user inputs, and we can’t modify any of the book options, so we look elsewhere. </p>
-<p>Checking our cookies, I noticed that we have a <code>PHPSESSID</code>, of course in base64.<br>Decrypting this, we are provided with a serialised PHP object.</p>
-<p><code>O:4:&quot;User&quot;:1:&#123;s:4:&quot;name&quot;;s:12:&quot;User86968804&quot;;&#125;</code></p>
-<p><em>Here comes me being dumb. As this was my first ever CTF competition, I had very little experience and had no clue what PHP serialisation was. So, I gave up here during the competition, after which someone told me that the solution was PHP deserialisation, and a few Google searches later, I solved it (yay).</em></p>
-<p>Deserialising the object, we get:</p>
-<p><code>__PHP_Incomplete_Class Object</code><br><code>(</code><br><code>    [__PHP_Incomplete_Class_Name] =&gt; User</code><br><code>    [name] =&gt; User86968804</code><br><code>)</code></p>
-<p>Essentially, the <code>PHPSESSID</code> is a serialised PHP object of class <code>User</code> and a value for name.</p>
-<p>Very interesting. We may be able to exploit this in the future as the code displays “Welcome to the Libwary, {name}”</p>
-<h2 id="Files-and-source"><a href="#Files-and-source" class="headerlink" title="Files and source"></a>Files and source</h2><p>We are given a file, Libwary.zip. In it we have 2 PHP files, index.php and util.php as well as a directory containing the books, fakeflag.txt and flag.txt, of course with a redacted flag.</p>
-<p>Opening util.php, we can see the following:</p>
-<p><img src="/images/pfp.jpg" alt="util"></p>
-<p>We notice that there are two classes,  <code>book</code>  and <code>user</code>. The User class does… well not really anything. However, the book class is interesting. We can see that it uses the <code>$name</code> variable to find the corresponding book and then returns the content of said book whenever an instance of the class is treated as a string.</p>
-<p>Also note that if the name is not <code>fakeflag</code> but contains “flag”, the word “flag” gets deleted.</p>
-<h1 id="EXPLOIT"><a href="#EXPLOIT" class="headerlink" title="EXPLOIT"></a>EXPLOIT</h1><p>Now for the fun part, exploitation.</p>
-<h2 id="The-Big-Idea"><a href="#The-Big-Idea" class="headerlink" title="The Big Idea"></a>The Big Idea</h2><p>The main vulnerability lies in these two lines:</p>
-<p><code>$user = unserialize(base64_decode($_COOKIE[&#39;PHPSESSID&#39;]));</code><br>and, of course<br><code>echo $user;</code></p>
-<p>If we can get <code>echo $user</code> to echo the contents of a Book object, we could just use that to get the contents of flag.txt. </p>
-<p>Very conveniently, the <code>__tostring()</code> function does exactly what we need. If we just changed the PHPSESSID cookie to a serialised object of class <code>Book</code>, like, say, I don’t know, a <code>Book</code> object of <code>$name</code> flag.txt, it would just echo out flag.txt.</p>
-<h2 id="Execution"><a href="#Execution" class="headerlink" title="Execution"></a>Execution</h2><p>Firstly, we create a serialised object that looks like this:</p>
-<p><code>O:4:&quot;Book&quot;:1:&#123;s:4:&quot;name&quot;;s:8:&quot;flag.txt&quot;;&#125;</code></p>
-<p>This creates an instance of <code>Book</code> that has the name “flag.txt”.</p>
-<p>Next, we encode it in Base64 to get this:</p>
-<p><code>Tzo0OiJCb29rIjoxOntzOjQ6Im5hbWUiO3M6ODoiZmxhZy50eHQiO30</code></p>
-<p>Passing this into our PHPSESSID and…</p>
-<p>image to be adding</p>
-<p>Whoops. Forgot about the final defence code.</p>
-<p><code>//final defence</code></p>
-<p><code> if ($this-&gt;name != &quot;fakeflag.txt&quot;) $this-&gt;name = str_ireplace(&quot;flag&quot;, &quot;&quot;, $this-&gt;name);</code></p>
-<p>However, this is an easy fix. We just change up our serialised object to this:<br> <code>O:4:&quot;Book&quot;:1:&#123;s:4:&quot;name&quot;;s:12:&quot;flaflagg.txt&quot;;&#125;</code> </p>
-<p>When the code tries to replace the “flag” in “flaflagg”, it just gives us back “flag.txt”</p>
-<p>Re-serialising and re-encoding, we get:</p>
-<p><code>Tzo0OiJCb29rIjoxOntzOjQ6Im5hbWUiO3M6MTI6ImZsZmxhZ2FnLnR4dCI7fQ</code></p>
-<p>Now we pass this into our PHPSESSID and..</p>
-<p>image</p>
-<p>Bam. Flag.</p>
-
-      </div>
-      
-        <div class="prev-or-next">
-          <div class="post-foot-next">
-            
-          </div>
-          <div class="post-attach">
-            <span class="post-pubtime">
-              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-              2024-11-26 10:52:07
-            </span>
-            
-                  <span class="post-tags">
-                    <i class="iconfont icon-tags mr-10" title="Tags"></i>
-                    
-                    <span class="span--tag mr-8">
-                      <a href="/tags/PHP-deserialization-Web/" title="PHP deserialization, Web">
-                        #PHP deserialization, Web
-                      </a>
-                    </span>
-                    
-                  </span>
-              
-          </div>
-          <div class="post-foot-prev">
-            
-              <a href="/2024/1337ctfwriteups/" target="_self">
-                <span>Next</span>
-                <i class="iconfont icon-chevronright"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-    </div>
-    
-  <div id="btn-catalog" class="btn-catalog">
-    <i class="iconfont icon-catalog"></i>
-  </div>
-  <div class="post-catalog hidden" id="catalog">
-    <div class="title">Contents</div>
-    <div class="catalog-content">
-      
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RECON"><span class="toc-text">RECON</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Website"><span class="toc-text">The Website</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Files-and-source"><span class="toc-text">Files and source</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EXPLOIT"><span class="toc-text">EXPLOIT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Big-Idea"><span class="toc-text">The Big Idea</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Execution"><span class="toc-text">Execution</span></a></li></ol></li></ol>
-      
+  <!-- 标签页 url形式：https://yoursite/tags/ -->
+  <div class="container tag-index">
+    <div>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP-deserialization-Web/" rel="tag">PHP deserialization, Web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
+  
 
   
-<script src="/js/catalog.js"></script>
 
+  
 
+  
 
-
-    
-      <div class="comments-container">
-        
-
-
-
-
-
-
-
-      </div>
-    
-  </div>
-
+  
 
         
 <div class="footer">
@@ -544,12 +420,12 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + libwary + '&url=' + https%3A%2F%2Fpersonjs0421.github.io%2F2024%2Flibwary%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + tags + '&url=' + https%3A%2F%2Fpersonjs0421.github.io%2Ftags%2Findex.html + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         
         
-          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://personjs0421.github.io/2024/libwary/" target="_blank" title="Facebook">
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://personjs0421.github.io/tags/index.html" target="_blank" title="Facebook">
             <i class="iconfont icon-facebooksquare"></i>
           </a>
         
